@@ -1,0 +1,141 @@
+openapi: 3.0.1
+info:
+  title: Sample API
+  description: Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
+  version: 0.1.9
+servers:
+  - url: https://auth.sensethis.com/v1
+    description: Main (production) authentication server
+  - url: https://auth2.sensethis.com/v1
+    description: Backup authentication server - Disabled
+  - url: https://api.sensethis.com/v1
+    description: Main (production) API server
+  - url: https://api2.sensethis.com/v1
+    description: Backup API server - Disabled
+paths:
+  /login:
+    post:
+      summary: Authenticates a user.
+      tags:
+        - Authentication
+      description: Must use auth.sensethis.com or auth2.sensethis.com servers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':    # status code
+          description: A JSON object with access and refresh tokens to use with the API server.
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: true if passed, false if failed
+                  message:
+                    type: string
+                    description: Message of status
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        access_token:
+                          type: string
+                          description: Access token to be used for the API server
+                        refresh_token:
+                          type: string
+                          description: Refresh token used to aquire new Access and refresh tokens
+        '400':    # status code
+          description: A JSON object with error code if failure.
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: true if passed, false if failed
+                  error_code:
+                    type: integer
+                    description: error code number that coorelates to the error message
+                  message:
+                    type: string
+                    description: Message of status
+                  data:
+                    type: array
+                    default: []
+                    description: empty array
+                    items:
+                      default: []
+  /refresh:
+    post:
+      summary: Generates new token and refresh token using the current unexpired refresh token.
+      tags:
+        - Authentication
+      description: Must use auth.sensethis.com or auth2.sensethis.com servers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refresh_token:
+                  type: string
+      responses:
+        '200':    # status code
+          description: A JSON object with access and refresh tokens to use with the API server.
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: true if passed, false if failed
+                  message:
+                    type: string
+                    description: Message of status
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        access_token:
+                          type: string
+                          description: Access token to be used for the API server
+                        refresh_token:
+                          type: string
+                          description: Refresh token used to aquire new Access and refresh tokens
+        '400':    # status code
+          description: A JSON object with error code if failure.
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: true if passed, false if failed
+                  error_code:
+                    type: integer
+                    description: error code number that coorelates to the error message
+                  message:
+                    type: string
+                    description: Message of status
+                  data:
+                    type: array
+                    default: []
+                    description: empty array
+                    items:
+                      default: []

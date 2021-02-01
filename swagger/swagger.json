@@ -1,0 +1,53 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "SenseThis API",
+        "description": "SenseThis API for Authentication and API use throughtout the SenseThis platform.",
+        "version": "0.1.1"
+    },
+    "servers": [
+        {
+            "url": "https://auth.sensethis.com/v1",
+            "description": "Main (production) authentication server"
+        },
+        {
+            "url": "https://auth2.sensethis.com/v1",
+            "description": "Backup authentication server"
+        },
+        {
+            "url": "https://api.sensethis.com/v1",
+            "description": "Main (production) API server"
+        },
+        {
+            "url": "https://api2.sensethis.com/v1",
+            "description": "Backup API server"
+        }
+    ],
+    "paths": {
+        "/login": {
+            "post": {
+                "summary": "Authenticates a user.",
+                "description": "must use auth.sensethis.com or auth2.sensethis.com servers",
+                "consumes":{
+
+                },
+            
+                "responses": {
+                    "200": {
+                        "description": "A JSON object with access and refresh tokens to use with the API server.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
